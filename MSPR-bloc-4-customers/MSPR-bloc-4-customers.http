@@ -1,0 +1,6 @@
+@MSPR_bloc_4_customers_HostAddress = http://localhost:5266
+
+GET {{MSPR_bloc_4_customers_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
