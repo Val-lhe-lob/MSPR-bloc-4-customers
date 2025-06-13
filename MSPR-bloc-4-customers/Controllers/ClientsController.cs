@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using MSPR_bloc_4_customers.Models; // Adapter selon le namespace généré
 using MSPR_bloc_4_customers.Data;   // Adapter selon le namespace généré
+using Microsoft.AspNetCore.Authorization;
 
 namespace MSPR_bloc_4_customers.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
