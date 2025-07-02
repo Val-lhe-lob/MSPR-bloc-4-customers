@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MSPR_bloc_4_customers.Data;
+using MSPR_bloc_4_customers.Models;
 using System.Linq;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
@@ -35,11 +36,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
                 db.Database.EnsureCreated();
 
-                db.Clients.Add(new MSPR_bloc_4_customers.Models.Client
+                db.Clients.Add(new Client
                 {
                     IdClient = 1,
                     Nom = "Test",
-                    Prenom = "User"
+                    Prenom = "User",
+                    CodePostal = "75000",
+                    Ville = "Paris"
                 });
 
                 db.SaveChanges();
