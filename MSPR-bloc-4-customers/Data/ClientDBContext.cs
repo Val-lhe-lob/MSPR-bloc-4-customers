@@ -20,9 +20,9 @@ public partial class ClientDBContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-IJOT06S\\SQLEXPRESS;Initial Catalog=MSPR4_CLIENT;Integrated Security=True;Trust Server Certificate=True");
+            optionsBuilder.UseSqlServer("Data Source=sqlserver;Initial Catalog=MSPR4_CLIENT;User ID=sa;Password=1StrongPwd!!;Encrypt=False");
         }
     }
 

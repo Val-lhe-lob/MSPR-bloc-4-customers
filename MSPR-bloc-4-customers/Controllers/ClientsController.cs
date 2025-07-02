@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MSPR_bloc_4_customers.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ClientsController : ControllerBase
@@ -18,12 +17,14 @@ namespace MSPR_bloc_4_customers.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "admin,moderator")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetAll()
         {
             return Ok(await _context.Clients.ToListAsync());
         }
 
+        //[Authorize(Roles = "admin,moderator")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetById(int id)
         {
@@ -33,6 +34,7 @@ namespace MSPR_bloc_4_customers.Controllers
             return Ok(client);
         }
 
+        //[Authorize]
         [HttpPost]
         public async Task<ActionResult<Client>> Create(Client client)
         {
@@ -41,6 +43,7 @@ namespace MSPR_bloc_4_customers.Controllers
             return CreatedAtAction(nameof(GetById), new { id = client.IdClient }, client);
         }
 
+        [Authorize(Roles = "admin,moderator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Client updatedClient)
         {
@@ -62,6 +65,7 @@ namespace MSPR_bloc_4_customers.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
