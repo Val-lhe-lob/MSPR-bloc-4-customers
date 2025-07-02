@@ -5,37 +5,43 @@ using Microsoft.Extensions.DependencyInjection;
 using MSPR_bloc_4_customers.Data;
 using System.Linq;
 
-namespace MSPR_BLOC4_Clients_tests
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        builder.UseEnvironment("Testing");
+
+        builder.ConfigureServices(services =>
         {
-            builder.ConfigureServices(services =>
+            // Trouve et retire la configuration précédente du DbContext avec SQL Server
+            var descriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<ClientDBContext>));
+
+            if (descriptor != null)
             {
-                // Supprime l'ancien DbContext SQL Server
-                var descriptor = services.SingleOrDefault(
-                    d => d.ServiceType == typeof(DbContextOptions<ClientDBContext>));
+                services.Remove(descriptor);
+            }
 
-                if (descriptor != null)
-                {
-                    services.Remove(descriptor);
-                }
-
-                // Ajoute le DbContext InMemory pour les tests
-                services.AddDbContext<ClientDBContext>(options =>
-                {
-                    options.UseInMemoryDatabase("TestDb");
-                });
-
-                // Crée la base de données et l'initialise si nécessaire
-                var sp = services.BuildServiceProvider();
-                using (var scope = sp.CreateScope())
-                {
-                    var db = scope.ServiceProvider.GetRequiredService<ClientDBContext>();
-                    db.Database.EnsureCreated();
-                }
+            // Ajoute le DbContext avec InMemory pour les tests
+            services.AddDbContext<ClientDBContext>(options =>
+            {
+                options.UseInMemoryDatabase("TestDb");
             });
-        }
+
+            // Crée la base et ajoute éventuellement des données de test si besoin
+            var sp = services.BuildServiceProvider();
+
+            using (var scope = sp.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<ClientDBContext>();
+
+                db.Database.EnsureCreated();
+
+                // Optionnel : seed des données pour tests
+                // db.Clients.Add(new Client { Nom = "TestClient", ... });
+                // db.SaveChanges();
+            }
+        });
     }
 }
