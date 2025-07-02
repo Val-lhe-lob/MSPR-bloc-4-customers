@@ -54,7 +54,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                     {
                         IdClient = 1,
                         Nom = "Test Client",
-                        Email = "test@client.com"
                     });
                     db.SaveChanges();
                 }
