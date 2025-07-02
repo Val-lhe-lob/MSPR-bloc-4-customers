@@ -53,7 +53,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                     IdClient = 1,
                     Nom = "Test Nom",
                     Prenom = "Test Prenom",
-                    Adresse = "123 Rue de Test",
                     CodePostal = "75000",
                     Ville = "Paris"
                 });
