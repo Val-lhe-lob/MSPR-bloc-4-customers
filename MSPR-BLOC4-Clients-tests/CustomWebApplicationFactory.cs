@@ -5,21 +5,37 @@ using Microsoft.Extensions.DependencyInjection;
 using MSPR_bloc_4_customers.Data;
 using System.Linq;
 
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+namespace MSPR_BLOC4_Clients_tests
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
-        builder.ConfigureServices(services =>
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<ClientDBContext>));
-            if (descriptor != null)
-                services.Remove(descriptor);
-
-            services.AddDbContext<ClientDBContext>(options =>
+            builder.ConfigureServices(services =>
             {
-                options.UseInMemoryDatabase("TestDb");
+                // Supprime l'ancien DbContext SQL Server
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(DbContextOptions<ClientDBContext>));
+
+                if (descriptor != null)
+                {
+                    services.Remove(descriptor);
+                }
+
+                // Ajoute le DbContext InMemory pour les tests
+                services.AddDbContext<ClientDBContext>(options =>
+                {
+                    options.UseInMemoryDatabase("TestDb");
+                });
+
+                // Crée la base de données et l'initialise si nécessaire
+                var sp = services.BuildServiceProvider();
+                using (var scope = sp.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<ClientDBContext>();
+                    db.Database.EnsureCreated();
+                }
             });
-        });
+        }
     }
 }
