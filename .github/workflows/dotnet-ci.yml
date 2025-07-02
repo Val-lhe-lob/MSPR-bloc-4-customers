@@ -20,7 +20,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release
       - name: Test
-        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage"
+        run: dotnet test MSPR-BLOC4-Clients-tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage"
         working-directory: MSPR-BLOC4-Clients-tests
       - name: Publish Test Results
         if: always()
