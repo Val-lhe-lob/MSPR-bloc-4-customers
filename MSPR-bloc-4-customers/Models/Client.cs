@@ -7,7 +7,6 @@ namespace MSPR_bloc_4_customers.Models;
 public partial class Client
 {
 
-    [Range(1, int.MaxValue, ErrorMessage = "L'identifiant doit être supérieur à 0.")]
     public int IdClient { get; set; }
 
     [Required]
