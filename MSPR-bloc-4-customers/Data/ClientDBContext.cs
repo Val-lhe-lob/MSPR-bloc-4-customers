@@ -33,7 +33,7 @@ public partial class ClientDBContext : DbContext
             entity.HasKey(e => e.IdClient).HasName("PK__Clients__6EC2B6C0C48EC7D6");
 
             entity.Property(e => e.IdClient)
-                .ValueGeneratedNever()
+                .ValueGeneratedOnAdd()
                 .HasColumnName("id_client");
             entity.Property(e => e.CodePostal)
                 .HasMaxLength(10)
